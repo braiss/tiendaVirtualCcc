@@ -1,0 +1,17 @@
+name: FortiDAST Proxy Server
+on:
+  push:
+   branches: [ main ]
+  pull_request:
+   branches: [ main ]
+jobs:
+  build:
+   runs-on: self-hosted
+   steps:
+   - uses: actions/checkout@v2
+   - name: DAST_PROXY_SERVER
+     run: |
+        export EMAIL=carlos.vargas@b2btic.com LICENSE_SERIAL=FDEVSC0000000777_1697ND274474 ASSET_TOKEN=BX10Px5gqpDKkc15Dvp+P6okqQM6xR9OK/H2QTPT+YH6a2/RxSAmmUw1bamJ8T2RXXauXUm2J4lBMufYUvIDQaeVvJU55WPGFqfuUw== SCANURL=http://10.36.234.2:9514 SCANTYPE=0 ASSET=1c751357-f871-4dba-8c6d-256c741f0357
+        env | grep -E "EMAIL|LICENSE_SERIAL|ASSET_TOKEN|SCANURL|SCANTYPE|ASSET" > /tmp/env
+        docker pull registry.fortidast.forticloud.com/dastdevopsproxy:latest
+        docker run --rm --env-file /tmp/env --network=host registry.fortidast.forticloud.com/dastdevopsproxy:latest
